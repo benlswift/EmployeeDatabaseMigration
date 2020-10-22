@@ -55,6 +55,7 @@ public class DAO {
             preparedStatement.executeUpdate();
             preparedStatement = connectionToDB().prepareStatement(createTable);
             int hasRun = preparedStatement.executeUpdate();
+            
             //precompiled statement
             //can execute many times
             if (hasRun == 1)
@@ -75,7 +76,6 @@ public class DAO {
                 + e.getMiddle_initial() + "','" + e.getLast_name() + "','" + e.getGender() + "','" + e.getEmail()
             + "','" + e.getDob() + "','" + e.getDateOfJoining() + "','" + e.getSalary() +"')," ;
         }
-
             insert= insert.substring(0, insert.length() - 1 );//remove final comma
             preparedStatement = connectionToDB().prepareStatement(insert);
             int hasRun = preparedStatement.executeUpdate();

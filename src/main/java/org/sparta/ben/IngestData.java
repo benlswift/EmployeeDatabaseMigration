@@ -6,10 +6,12 @@ import java.io.*;
 import java.util.*;
 
 public class IngestData {
-    public List<EmployeeDTO> ingestData(){
+    public List<EmployeeDTO> ingestData(String filePath){
 
-        File file = new File("resources/EmployeeRecords.csv");
+        File file = new File(filePath);
+        DataVerification dataVerification = new DataVerification();
         List<String> listOfDuplicates = new ArrayList();
+        List<String> listOfInvalidData = new ArrayList<>();
         Set<String> set = new HashSet<>();
         String line;
         List<EmployeeDTO> employees = new ArrayList();
@@ -30,8 +32,13 @@ public class IngestData {
                     employeeDTO.setDateOfJoining(line.split(",")[8]);
                     employeeDTO.setSalary(line.split(",")[9]);
                     employees.add(employeeDTO);
-
                     listOfKeys.add(line.split(",")[0]);
+                    //check if email is valid
+                    //still persist record but also add to another list
+                    if(!dataVerification.verifyEmail(line.split(",")[6])){
+                        listOfInvalidData.add(line);
+                    }
+
                 }
                 else{
                     listOfDuplicates.add(line);
