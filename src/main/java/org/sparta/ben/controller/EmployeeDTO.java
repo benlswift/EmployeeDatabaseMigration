@@ -32,7 +32,7 @@ public class EmployeeDTO {
     }
 
     public String getPrefix() {
-        return first_name;
+        return prefix;
     }
 
     public void setPrefix(String prefix) {

@@ -9,16 +9,13 @@ public class IngestData {
     public List<EmployeeDTO> ingestData(){
 
         File file = new File("resources/EmployeeRecords.csv");
-//        List<String> listOfData = new ArrayList();
-//        List<String> listOfColumns = new ArrayList();
         List<String> listOfDuplicates = new ArrayList();
         Set<String> set = new HashSet<>();
         String line;
         List<EmployeeDTO> employees = new ArrayList();
         List<String> listOfKeys = new ArrayList();
-        try (BufferedReader bufferedReader =
-                     new BufferedReader(new FileReader(file))) {
-            line = bufferedReader.readLine();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            line = bufferedReader.readLine();//column names
             while ((line = bufferedReader.readLine()) != null){
                 if (!listOfKeys.contains(line.split(",")[0])){
                     EmployeeDTO employeeDTO = new EmployeeDTO();
@@ -31,6 +28,7 @@ public class IngestData {
                     employeeDTO.setEmail(line.split(",")[6]);
                     employeeDTO.setDob(line.split(",")[7]);
                     employeeDTO.setDateOfJoining(line.split(",")[8]);
+                    employeeDTO.setSalary(line.split(",")[9]);
                     employees.add(employeeDTO);
 
                     listOfKeys.add(line.split(",")[0]);
