@@ -8,16 +8,16 @@ import org.sparta.ben.controller.EmployeeDTO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngestDataTest
+public class ReadCSVTest
 {
 
     @Test
-    public void ingestDataTest()
+    public void readCSVTest()
     {
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        IngestData ingestData = new IngestData();
+        ReadCSVFile readCSVFile = new ReadCSVFile();
         List<EmployeeDTO> employees = new ArrayList<>();
-        employees = ingestData.ingestData("resources/EmployeeRecords.csv");
-        Assertions.assertEquals(198429, employees.get(0).getEmpID());
+        employees = readCSVFile.readCSVFile("resources/EmployeeRecords.csv");
+        Assertions.assertEquals(9943, employees.size());
     }
 }

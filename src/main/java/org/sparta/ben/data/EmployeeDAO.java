@@ -1,4 +1,4 @@
-package org.sparta.ben;
+package org.sparta.ben.data;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -6,10 +6,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 import org.sparta.ben.controller.EmployeeDTO;
+import org.sparta.ben.view.Printer;
+
 import java.util.*;
 
-public class DAO {
+public class EmployeeDAO {
     private String URL = "jdbc:mysql://localhost:3306/myLocal?serverTimezone=GMT";
     private Properties properties = new Properties();
     private Connection connection = null;
@@ -69,24 +72,28 @@ public class DAO {
 
 
     public void insertEmployeeConcurrent(List<EmployeeDTO> employeeDTO){
-        String insert = "INSERT INTO employees VALUES ";
-        PreparedStatement preparedStatement = null;
         Connection connection = connectionToDB();
             //
+        long startTime = System.nanoTime();
+        long endTime;
+        long elapsedTime;
         int partitionSize = 1000;
         List<List<EmployeeDTO>> partitions = new ArrayList();
         for (int i = 0; i < employeeDTO.size(); i += partitionSize) {
-            partitions.add(employeeDTO.subList(i,
-                    Math.min(i + partitionSize, employeeDTO.size())));
+            partitions.add(employeeDTO.subList(i, Math.min(i + partitionSize, employeeDTO.size())));
         }
-            for (int i=0;i<partitions.size();i++){
-                ConcurrentDataPersistance conc = new ConcurrentDataPersistance(partitions.get(i), connection);
-                Thread thread = new Thread(conc);
-                thread.start();
-            }
-            Printer printer = new Printer();
-            printer.print("Number of threads: " + partitions.size());
-            Printer.print("Data successfully migrated");
+        for (int i=0;i<partitions.size();i++){
+            ConcurrentEmployeeDAO conc = new ConcurrentEmployeeDAO(partitions.get(i), connection);
+            Thread thread = new Thread(conc);
+            thread.start();
+        }
+        Printer printer = new Printer();
+        endTime = System.nanoTime();
+        elapsedTime = (endTime-startTime) / 1000000000;//convert to seconds
+        printer.print("Number of threads: " + partitions.size());
+        Printer.print("Data successfully migrated");
+        Printer.print("Time to store data in database: " + elapsedTime + " seconds");
+
 
     }
     public void insertEmployee(List<EmployeeDTO> employeeDTO){

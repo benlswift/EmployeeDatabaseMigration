@@ -1,14 +1,12 @@
 package org.sparta.ben.view;
 
-import org.sparta.ben.ConcurrentDataPersistance;
-import org.sparta.ben.DAO;
-import org.sparta.ben.IngestData;
-import org.sparta.ben.Printer;
+import org.sparta.ben.data.EmployeeDAO;
+import org.sparta.ben.ReadCSVFile;
 
 public class Starter {
     public void start() {
-        DAO dao = new DAO();
-        IngestData ingestData = new IngestData();
+        EmployeeDAO dao = new EmployeeDAO();
+        ReadCSVFile readCSVFile = new ReadCSVFile();
 
         long startTime;
         long endTime;
@@ -24,10 +22,10 @@ public class Starter {
         Printer.print("Concurrent Migration");
         startTime = System.nanoTime();
         dao.createTable();
-        dao.insertEmployeeConcurrent(ingestData.ingestData("resources/EmployeeRecordsLarge.csv"));
+        dao.insertEmployeeConcurrent(readCSVFile.readCSVFile("resources/EmployeeRecordsLarge.csv"));
         endTime = System.nanoTime();
         elapsedTime = (endTime-startTime) / 1000000000;//convert to seconds
-        Printer.print("Time elapsed: " + elapsedTime + " seconds");
+        Printer.print("Time for data migration: " + elapsedTime + " seconds");
 
     }
 }

@@ -3,6 +3,7 @@ package org.sparta.ben;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.sparta.ben.controller.EmployeeDTO;
+import org.sparta.ben.data.EmployeeDAO;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.util.Properties;
 
 public class DAOTest {
     EmployeeDTO employeeDTO = new EmployeeDTO();
-    IngestData ingestData = new IngestData();
-    DAO dao = new DAO();
+    ReadCSVFile readCSVFile = new ReadCSVFile();
+    EmployeeDAO dao = new EmployeeDAO();
     List<EmployeeDTO> employees = new ArrayList<>();
 
     private String URL = "jdbc:mysql://localhost:3306/myLocal?serverTimezone=GMT";
@@ -36,18 +37,18 @@ public class DAOTest {
         return connection;
     }
     @Test
-    public void compareDataTest(){
-        String dbValue;
+    public void numberOfRecordsTest(){
+        int dbValue;
         dao.createTable();
-        dao.insertEmployee(ingestData.ingestData("resources/EmployeeRecords.csv"));
+        dao.insertEmployee(readCSVFile.readCSVFile("resources/EmployeeRecords.csv"));
 
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connectionToDB().prepareStatement("SELECT last_name FROM myLocal.employees WHERE empID = 198429");
+            preparedStatement = connectionToDB().prepareStatement("SELECT COUNT(*) FROM myLocal.employees");
             ResultSet result = preparedStatement.executeQuery();
             result.next();
-            dbValue = result.getString("last_name");
-            Assertions.assertEquals("Bumgarner",dbValue);
+            dbValue = result.getInt("count(*)");
+            Assertions.assertEquals(9943,dbValue);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

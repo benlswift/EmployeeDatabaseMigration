@@ -1,4 +1,6 @@
-package org.sparta.ben.view;
+package org.sparta.ben;
+
+import org.sparta.ben.view.Starter;
 
 /**
  * For this project, you will be performing a data migration exercise from a CSV file to a SQL database.

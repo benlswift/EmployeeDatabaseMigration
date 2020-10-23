@@ -1,5 +1,7 @@
-package org.sparta.ben;
+package org.sparta.ben.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sparta.ben.controller.EmployeeDTO;
 
 import java.sql.Connection;
@@ -7,11 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ConcurrentDataPersistance implements Runnable
+public class ConcurrentEmployeeDAO implements Runnable
 {
     List<EmployeeDTO> employeeDTO;
     Connection connection;
-    public ConcurrentDataPersistance(List<EmployeeDTO> employeeDTO, Connection connection){
+    public ConcurrentEmployeeDAO(List<EmployeeDTO> employeeDTO, Connection connection){
         this.employeeDTO = employeeDTO;
         this.connection = connection;
     }
@@ -32,6 +34,10 @@ public class ConcurrentDataPersistance implements Runnable
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
+                Logger logger = LogManager.getLogger();
+                logger.error("Error in SQL insertion: " + throwables.getMessage());
+
+
             }
 
         }

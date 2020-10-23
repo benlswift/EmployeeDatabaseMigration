@@ -1,13 +1,19 @@
 package org.sparta.ben;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.sparta.ben.controller.EmployeeDTO;
+import org.sparta.ben.view.Printer;
 
 import java.io.*;
 import java.util.*;
 
-public class IngestData {
-    public List<EmployeeDTO> ingestData(String filePath){
-
+public class ReadCSVFile {
+    public List<EmployeeDTO> readCSVFile(String filePath){
+        long startTime;
+        long endTime;
+        long elapsedTime;
+        startTime = System.nanoTime();
         File file = new File(filePath);
         DataVerification dataVerification = new DataVerification();
         List<String> listOfDuplicates = new ArrayList();
@@ -44,12 +50,24 @@ public class IngestData {
                     listOfDuplicates.add(line);
                 }
             }
-            Printer.print("No of duplicates: " + listOfDuplicates.size());
+            endTime = System.nanoTime();
+
+            Printer.print("Number of duplicates: " + listOfDuplicates.size());
+            if(listOfInvalidData.size() !=0){
+                Printer.print("Number of invalid records: " + listOfInvalidData.size());
+            }
+            elapsedTime = (endTime-startTime) / 1000000000;//convert to seconds
+            Printer.print("Time to read file: " + elapsedTime + " seconds");
 
             } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Logger logger = LogManager.getLogger();
+            logger.error("File not found " + e.getMessage());
+            Printer.printError("Please enter a valid file name");
+            System.exit(0);
+
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger logger = LogManager.getLogger();
+            logger.error(e.getMessage());
         }
         return employees;
     }
