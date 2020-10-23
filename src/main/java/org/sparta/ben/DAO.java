@@ -55,7 +55,7 @@ public class DAO {
             preparedStatement.executeUpdate();
             preparedStatement = connectionToDB().prepareStatement(createTable);
             int hasRun = preparedStatement.executeUpdate();
-            
+
             //precompiled statement
             //can execute many times
             if (hasRun == 1)
@@ -67,9 +67,28 @@ public class DAO {
         }
     }
 
+
+    public void insertEmployeeConcurrent(List<EmployeeDTO> employeeDTO){
+            String insert = "INSERT INTO employees VALUES ";
+            PreparedStatement preparedStatement = null;
+            Connection connection = connectionToDB();
+            int numberOfRecords = employeeDTO.size();
+            int startOfSubSection =0;
+            int endOfSubsection = employeeDTO.size()/2;
+            for (int i=0;i<2;i++){
+                ConcurrentDataPersistance conc = new ConcurrentDataPersistance(employeeDTO.subList(startOfSubSection,endOfSubsection), connection);
+                Thread thread = new Thread(conc);
+                thread.start();
+                startOfSubSection = endOfSubsection;
+                endOfSubsection = employeeDTO.size();
+            }
+
+    }
     public void insertEmployee(List<EmployeeDTO> employeeDTO){
         String insert = "INSERT INTO employees VALUES ";
         PreparedStatement preparedStatement = null;
+
+
         try {
             for (EmployeeDTO e : employeeDTO){
             insert+= "("+ e.getEmpID() + ",'" + e.getPrefix() + "','" + e.getFirst_name() + "','"
