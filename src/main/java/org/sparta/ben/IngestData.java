@@ -44,7 +44,7 @@ public class IngestData {
                     listOfDuplicates.add(line);
                 }
             }
-            System.out.println("No of duplicates: " + listOfDuplicates.size());
+            Printer.print("No of duplicates: " + listOfDuplicates.size());
 
             } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -69,19 +69,24 @@ public class DAO {
 
 
     public void insertEmployeeConcurrent(List<EmployeeDTO> employeeDTO){
-            String insert = "INSERT INTO employees VALUES ";
-            PreparedStatement preparedStatement = null;
-            Connection connection = connectionToDB();
-            int numberOfRecords = employeeDTO.size();
-            int startOfSubSection =0;
-            int endOfSubsection = employeeDTO.size()/2;
-            for (int i=0;i<2;i++){
-                ConcurrentDataPersistance conc = new ConcurrentDataPersistance(employeeDTO.subList(startOfSubSection,endOfSubsection), connection);
+        String insert = "INSERT INTO employees VALUES ";
+        PreparedStatement preparedStatement = null;
+        Connection connection = connectionToDB();
+            //
+        int partitionSize = 1000;
+        List<List<EmployeeDTO>> partitions = new ArrayList();
+        for (int i = 0; i < employeeDTO.size(); i += partitionSize) {
+            partitions.add(employeeDTO.subList(i,
+                    Math.min(i + partitionSize, employeeDTO.size())));
+        }
+            for (int i=0;i<partitions.size();i++){
+                ConcurrentDataPersistance conc = new ConcurrentDataPersistance(partitions.get(i), connection);
                 Thread thread = new Thread(conc);
                 thread.start();
-                startOfSubSection = endOfSubsection;
-                endOfSubsection = employeeDTO.size();
             }
+            Printer printer = new Printer();
+            printer.print("Number of threads: " + partitions.size());
+            Printer.print("Data successfully migrated");
 
     }
     public void insertEmployee(List<EmployeeDTO> employeeDTO){
