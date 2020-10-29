@@ -1,6 +1,6 @@
-package org.sparta.ben;
+package org.sparta.ben.start;
 
-import org.sparta.ben.view.Starter;
+import org.sparta.ben.start.Starter;
 
 /**
  * For this project, you will be performing a data migration exercise from a CSV file to a SQL database.
@@ -22,7 +22,7 @@ import org.sparta.ben.view.Starter;
  * - Pull request by 23rd Oct Friday EOD
  *
  */
-public class App 
+public class Main
 {
     public static void main( String[] args )
     {

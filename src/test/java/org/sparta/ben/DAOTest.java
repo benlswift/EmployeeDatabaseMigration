@@ -3,7 +3,8 @@ package org.sparta.ben;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.sparta.ben.controller.EmployeeDTO;
-import org.sparta.ben.data.EmployeeDAO;
+import org.sparta.ben.fileReader.ReadCSVFile;
+import org.sparta.ben.model.EmployeeDAO;
 
 import java.io.FileReader;
 import java.io.IOException;
