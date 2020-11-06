@@ -20,25 +20,27 @@ public class ConcurrentEmployeeDAO implements Runnable
     @Override
     public void run() {
         synchronized (this){
-            String insert = "INSERT INTO employees VALUES ";
-            PreparedStatement preparedStatement = null;
-            try {
-                for (EmployeeDTO e : employeeDTO){
-                    insert+= "("+ e.getEmpID() + ",'" + e.getPrefix() + "','" + e.getFirst_name() + "','"
-                            + e.getMiddle_initial() + "','" + e.getLast_name() + "','" + e.getGender() + "','" + e.getEmail()
-                            + "','" + e.getDob() + "','" + e.getDateOfJoining() + "','" + e.getSalary() +"')," ;
-                }
-                insert= insert.substring(0, insert.length() - 1 );//remove final comma
-                preparedStatement = connection.prepareStatement(insert);
-                preparedStatement.executeUpdate();
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-                Logger logger = LogManager.getLogger();
-                logger.error("Error in SQL insertion: " + throwables.getMessage());
-
-
-            }
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            employeeDAO.insertEmployee(employeeDTO);
+//            String insert = "INSERT INTO employees VALUES ";
+//            PreparedStatement preparedStatement = null;
+//            try {
+//                for (EmployeeDTO e : employeeDTO){
+//                    insert+= "("+ e.getEmpID() + ",'" + e.getPrefix() + "','" + e.getFirst_name() + "','"
+//                            + e.getMiddle_initial() + "','" + e.getLast_name() + "','" + e.getGender() + "','" + e.getEmail()
+//                            + "','" + e.getDob() + "','" + e.getDateOfJoining() + "','" + e.getSalary() +"')," ;
+//                }
+//                insert= insert.substring(0, insert.length() - 1 );//remove final comma
+//                preparedStatement = connection.prepareStatement(insert);
+//                preparedStatement.executeUpdate();
+//
+//            } catch (SQLException throwables) {
+//                throwables.printStackTrace();
+//                Logger logger = LogManager.getLogger();
+//                logger.error("Error in SQL insertion: " + throwables.getMessage());
+//
+//
+//            }
 
         }
     }

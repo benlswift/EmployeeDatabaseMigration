@@ -12,12 +12,12 @@ public class Starter {
         long startTime;
         long endTime;
         long elapsedTime;
-        Printer.print("---Sequential Migration---");
-        startTime = System.nanoTime();
-        startSequential();
-        endTime = System.nanoTime();
-        elapsedTime = (endTime-startTime) / 1000000000;
-        Printer.print("Time elapsed: " + elapsedTime + " seconds");
+//        Printer.print("---Sequential Migration---");
+//        startTime = System.nanoTime();
+//        startSequential();
+//        endTime = System.nanoTime();
+//        elapsedTime = (endTime-startTime) / 1000000000;
+//        Printer.print("Time elapsed: " + elapsedTime + " seconds");
         Printer.print("\n---Concurrent Migration---");
         startTime = System.nanoTime();
         startConcurrent();
@@ -29,10 +29,18 @@ public class Starter {
     }
     public void startSequential(){
         dao.createTable();
+        long endTime;
+        long elapsedTime;
+        long startTime = System.nanoTime();
         dao.insertEmployee(readCSVFile.readCSVFile("resources/EmployeeRecords.csv"));
+        Printer printer = new Printer();
+        endTime = System.nanoTime();
+        elapsedTime = (endTime-startTime) / 1000000000;//convert to seconds
+        Printer.print("Data successfully migrated");
+        Printer.print("Time to store data in database: " + elapsedTime + " seconds");
     }
     public void startConcurrent(){
         dao.createTable();
-        dao.insertEmployeeConcurrent(readCSVFile.readCSVFile("resources/EmployeeRecords.csv"));
+        dao.insertEmployeeConcurrent(readCSVFile.readCSVFile("resources/EmployeeRecordsLarge.csv"));
     }
 }

@@ -99,9 +99,6 @@ public class EmployeeDAO {
     public void insertEmployee(List<EmployeeDTO> employeeDTO){
         String insert = "INSERT INTO employees VALUES ";
         PreparedStatement preparedStatement = null;
-        long startTime = System.nanoTime();
-        long endTime;
-        long elapsedTime;
 
         try {
             for (EmployeeDTO e : employeeDTO){
@@ -119,11 +116,7 @@ public class EmployeeDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        Printer printer = new Printer();
-        endTime = System.nanoTime();
-        elapsedTime = (endTime-startTime) / 1000000000;//convert to seconds
-        Printer.print("Data successfully migrated");
-        Printer.print("Time to store data in database: " + elapsedTime + " seconds");
+
 
     }
 
