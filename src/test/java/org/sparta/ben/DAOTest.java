@@ -3,7 +3,7 @@ package org.sparta.ben;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.sparta.ben.controller.EmployeeDTO;
-import org.sparta.ben.fileReader.ReadCSVFile;
+import org.sparta.ben.inputreader.CSVFileReader;
 import org.sparta.ben.model.EmployeeDAO;
 
 import java.io.FileReader;
@@ -16,7 +16,7 @@ import java.util.Properties;
 
 public class DAOTest {
     EmployeeDTO employeeDTO = new EmployeeDTO();
-    ReadCSVFile readCSVFile = new ReadCSVFile();
+    CSVFileReader CSVFileReader = new CSVFileReader();
     EmployeeDAO dao = new EmployeeDAO();
     List<EmployeeDTO> employees = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class DAOTest {
     public void numberOfRecordsTest(){
         int dbValue;
         dao.createTable();
-        dao.insertEmployee(readCSVFile.readCSVFile("resources/EmployeeRecords.csv"));
+        dao.insertEmployee(CSVFileReader.readCSVFile("resources/EmployeeRecords.csv"));
 
         PreparedStatement preparedStatement = null;
         try {

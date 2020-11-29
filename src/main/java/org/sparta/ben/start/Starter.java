@@ -1,46 +1,42 @@
 package org.sparta.ben.start;
 
+import org.sparta.ben.inputreader.UserInputReader;
 import org.sparta.ben.model.EmployeeDAO;
-import org.sparta.ben.fileReader.ReadCSVFile;
+import org.sparta.ben.inputreader.CSVFileReader;
 import org.sparta.ben.view.Printer;
 
 public class Starter {
     EmployeeDAO dao = new EmployeeDAO();
-    ReadCSVFile readCSVFile = new ReadCSVFile();
+    CSVFileReader CSVFileReader = new CSVFileReader();
     public void start() {
 
         long startTime;
         long endTime;
         long elapsedTime;
-//        Printer.print("---Sequential Migration---");
-//        startTime = System.nanoTime();
-//        startSequential();
-//        endTime = System.nanoTime();
-//        elapsedTime = (endTime-startTime) / 1000000000;
-//        Printer.print("Time elapsed: " + elapsedTime + " seconds");
-        Printer.print("\n---Concurrent Migration---");
+        String fileName;
+        int migrationType;
+
+        fileName = UserInputReader.readUserInputString("Please enter file name");
+        migrationType = UserInputReader.readUserInputInt("Please choose: \n1. Sequential \n2. Concurrent");
         startTime = System.nanoTime();
-        startConcurrent();
+        if (migrationType == 1){
+            startSequential(fileName);
+        }
+        else if (migrationType == 2){
+            startConcurrent(fileName);
+        }
         endTime = System.nanoTime();
         elapsedTime = (endTime-startTime) / 1000000000;//convert to seconds
         Printer.print("Time for data migration: " + elapsedTime + " seconds");
-
-
-    }
-    public void startSequential(){
-        dao.createTable();
-        long endTime;
-        long elapsedTime;
-        long startTime = System.nanoTime();
-        dao.insertEmployee(readCSVFile.readCSVFile("resources/EmployeeRecords.csv"));
-        Printer printer = new Printer();
-        endTime = System.nanoTime();
-        elapsedTime = (endTime-startTime) / 1000000000;//convert to seconds
         Printer.print("Data successfully migrated");
-        Printer.print("Time to store data in database: " + elapsedTime + " seconds");
     }
-    public void startConcurrent(){
+    public void startSequential(String fileName){
         dao.createTable();
-        dao.insertEmployeeConcurrent(readCSVFile.readCSVFile("resources/EmployeeRecordsLarge.csv"));
+        dao.insertEmployee(CSVFileReader.readCSVFile("resources/"+fileName));
+    }
+    public void startConcurrent(String fileName){
+        Printer.print("\n---Concurrent Migration---");
+        dao.createTable();
+        dao.insertEmployeeConcurrent(CSVFileReader.readCSVFile("resources/"+fileName));
     }
 }
