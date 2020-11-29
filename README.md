@@ -3,7 +3,7 @@
 ---
 This program reads a CSV file and stores the data of employees into a 
 data transfer object. This is then migrated to a database.
-The program is capable of multithreading.
+The program uses multithreading to speed up the persistence.
 
 ## Requirements
 - Persist data from a CSV to a database
@@ -36,4 +36,10 @@ By halving the partition size to 500, 131 threads migrated the data in 20 second
 ### Sequential Migration
 Without concurrency, the data migration is completed in 115 seconds.
 
---## User Guide
+## User Guide
+- Upon running the program you will be asked for the name of the csv file to be persisted
+- This file must be in the resources folder and the full file name must be entered, including ".csv"
+- You will now be prompted to choose from sequential or concurrent migration
+- Choosing sequential will persist all records together, this will be slower
+- Choosing concurrent will persist groups of records together, this will be quicker
+- The total time taken for the data to be persisted will be displayed 
